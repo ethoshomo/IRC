@@ -16,17 +16,14 @@ volatile sig_atomic_t flag = 0;
 int sockfd = 0;
 char name[30];
 
-void str_overwrite_stdout()
-{
+void str_overwrite_stdout(){
 	printf("%s", "> ");
 	fflush(stdout);
 }
 
-void str_trim_lf(char *arr, int length)
-{
+void str_trim_lf(char *arr, int length){
 	int i;
-	for (i = 0; i < length; i++)
-	{ // trim \n
+	for (i = 0; i < length; i++){ // trim \n
 		if (arr[i] == '\n')
 		{
 			arr[i] = '\0';
@@ -35,24 +32,20 @@ void str_trim_lf(char *arr, int length)
 	}
 }
 
-void catch_ctrl_c_and_exit(int sig)
-{
+void catch_ctrl_c_and_exit(int sig){
 	flag = 1;
 }
 
-void send_msg_handler()
-{
+void send_msg_handler(){
 	char message[LENGTH] = {};
 	char buffer[LENGTH + 32] = {};
 
-	while (1)
-	{
+	while (1){
 		str_overwrite_stdout();
 		fgets(message, LENGTH, stdin);
 		str_trim_lf(message, LENGTH);
 
-		if (strcmp(message, "exit") == 0)
-		{
+		if (strcmp(message, "exit") == 0){
 			break;
 		}
 		else
