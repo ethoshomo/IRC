@@ -43,7 +43,7 @@ int main()
     serverDescriptor = socket(AF_INET, SOCK_STREAM, 0);
     if (serverDescriptor == FAIL)
     {
-        fprintf(stdout, "Deu zebra no porta!\n");
+        fprintf(stdout, "Erro no porta!\n");
         return ERROR;
     }
     fprintf(stdout, "Socket criado com sucesso!\n");
@@ -57,7 +57,7 @@ int main()
     int returnConnect = connect(serverDescriptor, (struct sockaddr *)&server, len);
     if (returnConnect == FAIL)
     {
-        fprintf(stdout, "Deu zebra na conexão!\n");
+        fprintf(stdout, "Erro na conexão!\n");
         return ERROR;
     }
 
@@ -65,8 +65,8 @@ int main()
     slen = recv(serverDescriptor, buffer, BUFFER, 0);
     if (slen > 0)
     {
-        buffer[slen + 1] = '\0';
-        fprintf(stdout, "Resposta do server: %s!\n", buffer);
+        buffer[slen - 1] = '\0';
+        fprintf(stdout, "Resposta do server: %s\n", buffer);
     }
 
     while (TRUE)
@@ -78,6 +78,7 @@ int main()
         // Coletando mensagem para enviar ao Servidor
         fprintf(stdout, "Digite a mensagem:\n");
         fgets(buffer, BUFFER, stdin);
+        fprintf(stdout, "Aguardando resposta!\n");
 
         // Enviando mensagem
         send(serverDescriptor, buffer, strlen(buffer), 0);
@@ -90,12 +91,14 @@ int main()
         if (slen > 0)
         {
 
-            if (strcmp(buffer, "/quit") == 0){
+            if (strcmp(buffer, "/quit") == 0)
+            {
                 break;
             }
-            else{
+            else
+            {
                 buffer[slen - 1] = '\0';
-                fprintf(stdout, "Resposta do server: '%s'!\n", buffer);
+                fprintf(stdout, "Resposta do server: %s\n", buffer);
             }
         }
     }
